@@ -15,9 +15,16 @@ fun puzzle4() = lines.count {
 }
 
 fun puzzle4alt() = lines
-    .map { it.split(',').map { (it.split('-')[0].toInt()..it.split('-')[1].toInt()).toList() } } //turn 1-4 into [1, 2, 3, 4]
-    .count {it[0].toSet().intersect(it[1].toSet()).let{intersection -> intersection .size == it[0].size || intersection.size == it[1].size} }
+    .map {
+        it.split(',').map { (it.split('-')[0].toInt()..it.split('-')[1].toInt()).toList() }
+    } //turn 1-4 into [1, 2, 3, 4]
+    .count {
+        it[0].toSet().intersect(it[1].toSet())
+            .let { intersection -> intersection.size == it[0].size || intersection.size == it[1].size }
+    }
 
 fun puzzle4dot1() = lines
-    .map { it.split(',').map { (it.split('-')[0].toInt()..it.split('-')[1].toInt()).toList() } } //turn 1-4 into [1, 2, 3, 4]
+    .map {
+        it.split(',').map { (it.split('-')[0].toInt()..it.split('-')[1].toInt()).toList() }
+    } //turn 1-4 into [1, 2, 3, 4]
     .count { it[0].toSet().intersect(it[1].toSet()).isNotEmpty() }
