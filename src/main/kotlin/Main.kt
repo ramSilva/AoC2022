@@ -7,6 +7,8 @@ import puzzles.puzzle3dot1
 import puzzles.puzzle4
 import puzzles.puzzle4alt
 import puzzles.puzzle4dot1
+import puzzles.puzzle5
+import puzzles.puzzle5dot1
 
 fun main() {
     println("""1: ${puzzle1()}""")
@@ -18,4 +20,6 @@ fun main() {
     println("""4: ${puzzle4()}""")
     println("""4 alt: ${puzzle4alt()}""")
     println("""4.1: ${puzzle4dot1()}""")
+    println("""5: ${puzzle5()}""")
+    println("""5.1: ${puzzle5dot1()}""")
 }
