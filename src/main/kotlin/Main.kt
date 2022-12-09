@@ -16,6 +16,8 @@ import puzzles.puzzle7ButLegible
 import puzzles.puzzle8
 import puzzles.puzzle8alt
 import puzzles.puzzle8dot1
+import puzzles.puzzle9
+import puzzles.puzzle9dot1
 
 fun main() {
     println("""1: ${puzzle1()}""")
@@ -36,5 +38,7 @@ fun main() {
     println("""8: ${puzzle8()}""")
     println("""8 alt: ${puzzle8alt()}""")
     println("""8.1: ${puzzle8dot1()}""")
+    println("""9: ${puzzle9()}""")
+    println("""9.1: ${puzzle9dot1()}""")
 
 }
