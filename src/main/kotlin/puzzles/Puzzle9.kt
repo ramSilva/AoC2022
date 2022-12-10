@@ -47,7 +47,6 @@ fun puzzle9(): Int {
 
 fun puzzle9dot1(): Int {
     val visitedTailPositions = mutableSetOf(Pair(0f, 0f))
-    var headPosition = Pair(0f, 0f)
     val knots = MutableList(10) { Pair(0f, 0f) }
 
     lines.forEach {
@@ -61,22 +60,10 @@ fun puzzle9dot1(): Int {
         }
 
         for (i in 0 until amount.toInt()) {
-            headPosition = Pair(
-                headPosition.first + moveDirection.first,
-                headPosition.second + moveDirection.second
+            knots[0] = Pair(
+                knots[0].first + moveDirection.first,
+                knots[0].second + moveDirection.second
             )
-
-            if (headPosition.distance(knots[0]) > sqrt(2.0f)) {
-                val delta = Pair(
-                    sign(headPosition.first - knots[0].first),
-                    sign(headPosition.second - knots[0].second)
-                )
-
-                knots[0] = Pair(
-                    knots[0].first + delta.first,
-                    knots[0].second + delta.second
-                )
-            }
 
             for (i in 0 until knots.size - 1) {
                 val knotA = knots[i]
