@@ -1,14 +1,12 @@
 package puzzles
 
 import java.io.File
-import java.math.BigInteger
-import kotlin.math.abs
 
 private val lines = File("input/puzzle11/input.txt").readLines()
 
 data class Monke(
     var items: MutableList<Long> = mutableListOf(),
-    var operation: ((worry: Long) -> Long) = { 0 },
+    var operation: (Long) -> Long = { 0L },
     var test: Int = 0,
     var testSuccess: Int = 0,
     var testFail: Int = 0,
@@ -20,45 +18,47 @@ fun puzzle11(isPart1: Boolean): Long {
     var currentMonke = -1
 
     lines.forEach {
-        if (it.contains("Monkey")) { // Monkey with capital M means it's the first line
-            currentMonke = "\\w (\\d+):".toRegex().find(it)!!.groupValues[1].toInt()
-            monkes.add(currentMonke, Monke())
-        }
-        if (it.contains("Starting items")) {
-            val startingItems =
-                "\\w+: (.*)".toRegex().find(it)!!.groupValues[1].split(", ")
-                    .map { it.toLong() }
-            monkes[currentMonke].items = startingItems.toMutableList()
-        }
-        if (it.contains("Operation")) {
-            val (operator, amount) = "\\w+ ([\\*|\\+]) (.*)".toRegex().find(it)!!.destructured
-            val operation: (worry: Long) -> Long =
-                if (operator == "+") {
-                    if (amount == "old") {
-                        { old -> old + old }
+        when {
+            it.contains("Monkey") -> { // Monkey with capital M means it's the first line
+                currentMonke = "\\w (\\d+):".toRegex().find(it)!!.groupValues[1].toInt()
+                monkes.add(currentMonke, Monke())
+            }
+            it.contains("Starting items") -> {
+                val startingItems =
+                    "\\w+: (.*)".toRegex().find(it)!!.groupValues[1].split(", ")
+                        .map { it.toLong() }
+                monkes[currentMonke].items = startingItems.toMutableList()
+            }
+            it.contains("Operation") -> {
+                val (operator, amount) = "\\w+ ([*|+]) (.*)".toRegex().find(it)!!.destructured
+                val operation: (Long) -> Long =
+                    if (operator == "+") {
+                        if (amount == "old") {
+                            { old -> old + old }
+                        } else {
+                            { old -> old + amount.toLong() }
+                        }
                     } else {
-                        { old -> old + amount.toLong() }
+                        if (amount == "old") {
+                            { old -> old * old }
+                        } else {
+                            { old -> old * amount.toLong() }
+                        }
                     }
-                } else {
-                    if (amount == "old") {
-                        { old -> old * old }
-                    } else {
-                        { old -> old * amount.toLong() }
-                    }
-                }
-            monkes[currentMonke].operation = operation
-        }
-        if (it.contains("Test")) {
-            val amount = ".* (\\d+)".toRegex().find(it)!!.groupValues[1].toInt()
-            monkes[currentMonke].test = amount
-        }
-        if (it.contains("true")) {
-            val target = ".* (\\d+)".toRegex().find(it)!!.groupValues[1].toInt()
-            monkes[currentMonke].testSuccess = target
-        }
-        if (it.contains("false")) {
-            val target = ".* (\\d+)".toRegex().find(it)!!.groupValues[1].toInt()
-            monkes[currentMonke].testFail = target
+                monkes[currentMonke].operation = operation
+            }
+            it.contains("Test") -> {
+                val amount = ".* (\\d+)".toRegex().find(it)!!.groupValues[1].toInt()
+                monkes[currentMonke].test = amount
+            }
+            it.contains("true") -> {
+                val target = ".* (\\d+)".toRegex().find(it)!!.groupValues[1].toInt()
+                monkes[currentMonke].testSuccess = target
+            }
+            it.contains("false") -> {
+                val target = ".* (\\d+)".toRegex().find(it)!!.groupValues[1].toInt()
+                monkes[currentMonke].testFail = target
+            }
         }
     }
 
