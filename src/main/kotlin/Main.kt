@@ -1,6 +1,7 @@
 import puzzles.puzzle1
 import puzzles.puzzle10
 import puzzles.puzzle10dot1
+import puzzles.puzzle11
 import puzzles.puzzle1dot1
 import puzzles.puzzle2
 import puzzles.puzzle2dot1
@@ -44,5 +45,6 @@ fun main() {
     println("""9.1: ${puzzle9dot1()}""")
     println("""10: ${puzzle10()}""")
     println("""10.1: ${puzzle10dot1()}""")
-
+    println("""11: ${puzzle11(true)}""")
+    println("""11.1: ${puzzle11(false)}""")
 }
