@@ -9,8 +9,8 @@ fun puzzle12(): Int {
     var startingPosition = Pair(0, 0)
     val successPath: List<Pair<Int, Int>>
 
-    // This is a list of Pairs of positions: path to said position. i.e.: [((2, 2), [(0, 0), (0, 1), (1, 1), (2, 1), (2, 2))]
-    val visitQueue = mutableListOf<Pair<Pair<Int, Int>, List<Pair<Int, Int>>>>()
+    // List of paths. The current node on each path is the last entry in the list
+    val visitQueue = mutableListOf<List<Pair<Int, Int>>>()
 
     val visitedPositions = mutableSetOf<Pair<Int, Int>>()
 
@@ -23,28 +23,29 @@ fun puzzle12(): Int {
         }
     }
 
-    visitQueue.add(Pair(startingPosition, listOf()))
+    visitQueue.add(listOf(startingPosition))
 
     while (true) {
-        val currentNode = visitQueue.first()
+        val currentPath = visitQueue.first()
+        val currentNode = currentPath.last()
         visitQueue.removeFirst()
 
-        if (grid[currentNode.first.second][currentNode.first.first] == 'E') {
-            successPath = currentNode.second
+        if (grid[currentNode.second][currentNode.first] == 'E') {
+            successPath = currentPath
             break
         }
 
         val currentHeight = when {
-            grid[currentNode.first.second][currentNode.first.first] == 'E' -> 'z'
-            grid[currentNode.first.second][currentNode.first.first] == 'S' -> 'a'
-            else -> grid[currentNode.first.second][currentNode.first.first]
+            grid[currentNode.second][currentNode.first] == 'E' -> 'z'
+            grid[currentNode.second][currentNode.first] == 'S' -> 'a'
+            else -> grid[currentNode.second][currentNode.first]
         }
 
         val adjacentNodes = listOf(
-            Pair(currentNode.first.first - 1, currentNode.first.second),
-            Pair(currentNode.first.first + 1, currentNode.first.second),
-            Pair(currentNode.first.first, currentNode.first.second - 1),
-            Pair(currentNode.first.first, currentNode.first.second + 1)
+            Pair(currentNode.first - 1, currentNode.second),
+            Pair(currentNode.first + 1, currentNode.second),
+            Pair(currentNode.first, currentNode.second - 1),
+            Pair(currentNode.first, currentNode.second + 1)
         )
 
         adjacentNodes.forEach { adjacent ->
@@ -61,27 +62,24 @@ fun puzzle12(): Int {
                 }
 
                 if (currentHeight - adjacentHeight >= -1) {
-                    val newPath = currentNode.second.toMutableList()
-                    newPath.add(adjacent)
-
-                    visitQueue.add(Pair(adjacent, newPath))
+                    visitQueue.add(currentPath.plus(adjacent))
                     visitedPositions.add(adjacent)
                 }
             }
         }
     }
 
-    return successPath.size
+    return successPath.size - 1 // the first node doesn't count
 }
 
 
-fun puzzle12dot1(): Int? {
+fun puzzle12dot1(): Int {
     val grid = mutableListOf<MutableList<Char>>()
     val startingPositions = mutableListOf<Pair<Int, Int>>()
     val successPaths = mutableListOf<List<Pair<Int, Int>>>()
 
-    // This is a list of Pairs of positions: path to said position. i.e.: [((2, 2), [(0, 0), (0, 1), (1, 1), (2, 1), (2, 2))]
-    val visitQueue = mutableListOf<Pair<Pair<Int, Int>, List<Pair<Int, Int>>>>()
+    // List of paths. The current node on each path is the last entry in the list
+    val visitQueue = mutableListOf<List<Pair<Int, Int>>>()
 
     val visitedPositions = mutableSetOf<Pair<Int, Int>>()
 
@@ -98,30 +96,31 @@ fun puzzle12dot1(): Int? {
         visitQueue.clear()
         visitedPositions.clear()
 
-        visitQueue.add(Pair(it, listOf()))
+        visitQueue.add(listOf(it))
 
         while (true) {
             if (visitQueue.isEmpty()) break
 
-            val currentNode = visitQueue.first()
+            val currentPath = visitQueue.first()
+            val currentNode = currentPath.last()
             visitQueue.removeFirst()
 
-            if (grid[currentNode.first.second][currentNode.first.first] == 'E') {
-                successPaths.add(currentNode.second)
+            if (grid[currentNode.second][currentNode.first] == 'E') {
+                successPaths.add(currentPath)
                 break
             }
 
             val currentHeight = when {
-                grid[currentNode.first.second][currentNode.first.first] == 'E' -> 'z'
-                grid[currentNode.first.second][currentNode.first.first] == 'S' -> 'a'
-                else -> grid[currentNode.first.second][currentNode.first.first]
+                grid[currentNode.second][currentNode.first] == 'E' -> 'z'
+                grid[currentNode.second][currentNode.first] == 'S' -> 'a'
+                else -> grid[currentNode.second][currentNode.first]
             }
 
             val adjacentNodes = listOf(
-                Pair(currentNode.first.first - 1, currentNode.first.second),
-                Pair(currentNode.first.first + 1, currentNode.first.second),
-                Pair(currentNode.first.first, currentNode.first.second - 1),
-                Pair(currentNode.first.first, currentNode.first.second + 1)
+                Pair(currentNode.first - 1, currentNode.second),
+                Pair(currentNode.first + 1, currentNode.second),
+                Pair(currentNode.first, currentNode.second - 1),
+                Pair(currentNode.first, currentNode.second + 1)
             )
 
             adjacentNodes.forEach { adjacent ->
@@ -138,10 +137,7 @@ fun puzzle12dot1(): Int? {
                     }
 
                     if (currentHeight - adjacentHeight >= -1) {
-                        val newPath = currentNode.second.toMutableList()
-                        newPath.add(adjacent)
-
-                        visitQueue.add(Pair(adjacent, newPath))
+                        visitQueue.add(currentPath.plus(adjacent))
                         visitedPositions.add(adjacent)
                     }
                 }
@@ -149,6 +145,6 @@ fun puzzle12dot1(): Int? {
         }
     }
 
-    return successPaths.minByOrNull { it.size }?.size
+    return (successPaths.minByOrNull { it.size }?.size ?: 0) - 1 // the first node doesn't count
 }
 
