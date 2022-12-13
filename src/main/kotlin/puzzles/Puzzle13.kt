@@ -22,26 +22,28 @@ fun puzzle13(): Int {
 
 fun puzzle13dot1(): Int {
     val ordered = mutableListOf<Any>()
-    val og = lines.filter { it.isNotEmpty() }.map {
+    val unordered = lines.filter { it.isNotEmpty() }.map {
         Gson().fromJson(it, List::class.java)
     }.toMutableList()
 
-    og.add(arrayListOf(arrayListOf(2.0)))
-    og.add(arrayListOf(arrayListOf(6.0)))
+    val dividers = Pair(arrayListOf(arrayListOf(2.0)), arrayListOf(arrayListOf(6.0)))
+    unordered.add(dividers.first)
+    unordered.add(dividers.second)
 
     while (true) {
-        if(og.size == 1) break
-        var currentMin = og[0].toList()
-        og.forEach {
+        if (unordered.size == 0) break
+
+        var currentMin = unordered[0]
+        unordered.forEach {
             if (isSmaller(it, currentMin) == Result.ORDERED) {
                 currentMin = it
             }
         }
-        og.remove(currentMin)
+        unordered.remove(currentMin)
         ordered.add(currentMin)
     }
 
-    return (ordered.indexOf(arrayListOf(arrayListOf(2.0))) + 1) * (ordered.indexOf(arrayListOf(arrayListOf(6.0))) + 1)
+    return (ordered.indexOf(dividers.first) + 1) * (ordered.indexOf(dividers.second) + 1)
 }
 
 enum class Result {
