@@ -12,7 +12,7 @@ fun puzzle13(): Int {
         Gson().fromJson(it, List::class.java)
     }.chunked(2).forEach {
         index++
-        if (isSmaller(it.first(), it.last()) == Result.ORDERED) {
+        if (isOrdered(it.first(), it.last()) == Result.ORDERED) {
             ordered.add(index)
         }
     }
@@ -35,7 +35,7 @@ fun puzzle13dot1(): Int {
 
         var currentMin = unordered[0]
         unordered.forEach {
-            if (isSmaller(it, currentMin) == Result.ORDERED) {
+            if (isOrdered(it, currentMin) == Result.ORDERED) {
                 currentMin = it
             }
         }
@@ -52,7 +52,7 @@ enum class Result {
     INCONCLUSIVE
 }
 
-fun isSmaller(list1: List<*>, list2: List<*>): Result {
+fun isOrdered(list1: List<*>, list2: List<*>): Result {
     var i = 0
     while (true) {
         if (i >= list1.size && i >= list2.size) return Result.INCONCLUSIVE
@@ -68,15 +68,15 @@ fun isSmaller(list1: List<*>, list2: List<*>): Result {
             if (element2 < element1) return Result.NON_ORDERED
         }
         if (element1 is List<*> && element2 is List<*>) {
-            val result = isSmaller(element1, element2)
+            val result = isOrdered(element1, element2)
             if (result != Result.INCONCLUSIVE) return result
         }
         if (element1 is List<*> && element2 is Double) {
-            val result = isSmaller(element1, listOf(element2))
+            val result = isOrdered(element1, listOf(element2))
             if (result != Result.INCONCLUSIVE) return result
         }
         if (element1 is Double && element2 is List<*>) {
-            val result = isSmaller(listOf(element1), element2)
+            val result = isOrdered(listOf(element1), element2)
             if (result != Result.INCONCLUSIVE) return result
         }
 
