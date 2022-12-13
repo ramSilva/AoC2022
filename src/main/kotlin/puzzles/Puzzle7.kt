@@ -12,9 +12,9 @@ fun puzzle7ButLegible() {
     lines.forEach {
         if (it.contains("$ cd")) {
             when (val dest = Regex("\\$ cd (.+)").find(it)!!.groupValues[1]) {
-                ".." -> openFolders.removeAt(openFolders.size - 1)
+                ".." -> openFolders.removeLast()
                 "/" -> openFolders.removeIf { it != "/" }
-                else -> openFolders.add("""${openFolders.last()}/$dest""")
+                else -> openFolders.add("${openFolders.last()}/$dest")
             }
 
         }
