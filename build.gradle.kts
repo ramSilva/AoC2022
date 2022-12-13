@@ -12,7 +12,9 @@ repositories {
     mavenCentral()
 }
 
-
+dependencies {
+    implementation("com.google.code.gson:gson:2.8.6")
+}
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
