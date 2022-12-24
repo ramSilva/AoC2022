@@ -1,5 +1,5 @@
-import puzzles.puzzle20
+import puzzles.puzzle23
 
 fun main() {
-    println("""20: ${puzzle20()}""")
+    println("""23: ${puzzle23()}""")
 }
